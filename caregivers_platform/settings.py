@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-eu0$(h%67-hbcq$+anw_gwlqwk0me9hgo_p&^#1dh@sn(3agna
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://caregivers-platform-g05s.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -53,9 +53,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'caregivers_platform.urls'
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = "/static/"
 
 TEMPLATES = [
     {
@@ -74,19 +78,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'caregivers_platform.wsgi.application'
 
-
+import dj_database_url
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'caregivers_db',
-        'USER': 'postgres',
-        'PASSWORD': 'PGsql!pswrd!iceana2005',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default':  dj_database_url.config(default='postgresql://user:eDcxOut0d1vzwPYgjnnm4Jvvax6ZHw6p@dpg-d4i474pr0fns73ajt6sg-a.frankfurt-postgres.render.com/caregivers_db_o0j5')
 }
 
 
