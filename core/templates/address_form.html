@@ -1,0 +1,31 @@
+<h1>{% if address %}Edit{% else %}Create{% endif %} Address</h1>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li
+                {% if message.tags %} class="{{ message.tags }}"{% endif %}
+            >
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<form method="post">{% csrf_token %}
+    <label>Member:</label>
+    <select name="member_id" {% if address %}disabled{% endif %} required>
+        {% for member in members %}
+        <option value="{{ member.pk }}" {% if address and address.member.pk == member.pk %}selected{% endif %}>
+            {{ member.member_user.given_name }} {{ member.member_user.surname }}
+        </option>
+        {% endfor %}
+    </select><br>
+    <label>House Number:</label>
+    <input type="text" name="house_number" value="{{ address.house_number|default_if_none:'' }}"><br>
+    <label>Street:</label>
+    <input type="text" name="street" value="{{ address.street|default_if_none:'' }}"><br>
+    <label>Town:</label>
+    <input type="text" name="town" value="{{ address.town|default_if_none:'' }}"><br>
+    <button type="submit">Save</button>
+</form>
+<a href="{% url 'address_list' %}">Back to list</a>

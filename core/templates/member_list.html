@@ -1,0 +1,33 @@
+<h1>Members</h1>
+<p>
+  <a href="{% url 'member_create' %}">Create (existing user)</a> |
+  <a href="{% url 'member_register' %}">Family registration</a>
+</p>
+<table border="1">
+  <tr>
+    <th>User</th>
+    <th>House Rules</th>
+    <th>Dependent Description</th>
+    <th>Actions</th>
+  </tr>
+  {% for member in members %}
+  <tr>
+    <td>
+      {{ member.member_user.given_name }} {{ member.member_user.surname }}
+    </td>
+    <td>{{ member.house_rules }}</td>
+    <td>{{ member.dependent_description }}</td>
+    <td>
+      <a href="{% url 'member_edit' member.pk %}">Edit</a> |
+      <form
+        action="{% url 'member_delete' member.pk %}"
+        method="post"
+        style="display: inline"
+      >
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>

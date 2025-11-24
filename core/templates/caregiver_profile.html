@@ -1,0 +1,55 @@
+<h1>Caregiver Profile</h1>
+<p><strong>Name:</strong> {{ caregiver.caregiver_user.given_name }} {{ caregiver.caregiver_user.surname }}</p>
+<p><strong>City:</strong> {{ caregiver.caregiver_user.city }}</p>
+<p><strong>Caregiving type:</strong> {{ caregiver.caregiving_type }}</p>
+<p><strong>Hourly rate:</strong> {{ caregiver.hourly_rate }}</p>
+<p><strong>Biography:</strong> {{ caregiver.caregiver_user.profile_description }}</p>
+
+<h2>Send a message / allow contact</h2>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    <label>Your member profile:</label>
+    <select name="member_id" required>
+        {% for member in members %}
+            <option value="{{ member.pk }}">{{ member.member_user.given_name }} {{ member.member_user.surname }}</option>
+        {% endfor %}
+    </select><br>
+    <label>Message:</label>
+    <textarea name="message" required></textarea><br>
+    <label>
+        <input type="checkbox" name="allow_contact" value="1">
+        Allow caregiver to initiate contact
+    </label><br>
+    <button type="submit">Send</button>
+</form>
+
+<h2>Recent contact requests</h2>
+<table border="1">
+    <tr>
+        <th>Member</th>
+        <th>Message</th>
+        <th>Status</th>
+        <th>Allow contact</th>
+        <th>Sent at</th>
+    </tr>
+    {% for request in contact_requests %}
+    <tr>
+        <td>{{ request.member.member_user.given_name }} {{ request.member.member_user.surname }}</td>
+        <td>{{ request.message }}</td>
+        <td>{{ request.status }}</td>
+        <td>{{ request.allow_caregiver_initiate|yesno:"Yes,No" }}</td>
+        <td>{{ request.created_at }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No messages yet.</td></tr>
+    {% endfor %}
+</table>
+<a href="{% url 'caregiver_list' %}">Back to caregivers</a>
+

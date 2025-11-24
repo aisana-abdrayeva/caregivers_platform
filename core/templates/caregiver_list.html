@@ -1,0 +1,50 @@
+<h1>Caregivers</h1>
+<p>
+    <a href="{% url 'caregiver_create' %}">Create (existing user)</a> |
+    <a href="{% url 'caregiver_register' %}">Caregiver registration</a>
+</p>
+<form method="get">
+    <label>Caregiving Type:</label>
+    <select name="caregiving_type">
+        <option value="">Any</option>
+        {% for value,label in care_types %}
+            <option value="{{ value }}" {% if selected_type == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+    </select>
+    <label>City:</label>
+    <input type="text" name="city" value="{{ city_query }}">
+    <label>Min price:</label>
+    <input type="number" step="0.01" name="min_price" value="{{ min_price }}">
+    <label>Max price:</label>
+    <input type="number" step="0.01" name="max_price" value="{{ max_price }}">
+    <button type="submit">Search</button>
+</form>
+<table border="1">
+    <tr>
+        <th>User</th>
+        <th>Photo</th>
+        <th>Gender</th>
+        <th>Caregiving Type</th>
+        <th>Hourly Rate</th>
+        <th>Actions</th>
+    </tr>
+    {% for caregiver in caregivers %}
+    <tr>
+        <td>{{ caregiver.caregiver_user.given_name }} {{ caregiver.caregiver_user.surname }}</td>
+        <td>{{ caregiver.photo }}</td>
+        <td>{{ caregiver.gender }}</td>
+        <td>{{ caregiver.caregiving_type }}</td>
+        <td>{{ caregiver.hourly_rate }}</td>
+        <td>
+            <a href="{% url 'caregiver_profile' caregiver.pk %}">Profile</a> |
+            <a href="{% url 'caregiver_edit' caregiver.pk %}">Edit</a> |
+            <form action="{% url 'caregiver_delete' caregiver.pk %}" method="post" style="display:inline">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

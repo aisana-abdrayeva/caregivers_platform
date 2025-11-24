@@ -1,0 +1,55 @@
+<h1>Job #{{ job.job_id }}</h1>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<p><strong>Family:</strong>
+    {% if job.member %}
+        {{ job.member.member_user.given_name }} {{ job.member.member_user.surname }} ({{ job.member.member_user.city }})
+    {% else %}
+        Unassigned
+    {% endif %}
+</p>
+<p><strong>Caregiving type:</strong> {{ job.required_caregiving_type }}</p>
+<p><strong>Other requirements:</strong> {{ job.other_requirements }}</p>
+{% if detail %}
+    <p><strong>Care recipient age:</strong> {{ detail.care_recipient_age }}</p>
+    <p><strong>Preferred time slots:</strong> {{ detail.preferred_time_slots }}</p>
+    <p><strong>Service frequency:</strong> {{ detail.service_frequency }}</p>
+    <p><strong>Additional notes:</strong> {{ detail.additional_notes }}</p>
+{% endif %}
+
+<h2>Applicants</h2>
+<table border="1">
+    <tr>
+        <th>Caregiver</th>
+        <th>Applied on</th>
+    </tr>
+    {% for application in applications %}
+    <tr>
+        <td>{{ application.caregiver.caregiver_user.given_name }} {{ application.caregiver.caregiver_user.surname }}</td>
+        <td>{{ application.date_applied }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="2">No applications yet.</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Caregiver apply</h2>
+<form method="post" action="{% url 'job_application_create' %}">
+    {% csrf_token %}
+    <input type="hidden" name="job_id" value="{{ job.pk }}">
+    <input type="hidden" name="next" value="{% url 'job_detail' job.pk %}">
+    <label>Caregiver:</label>
+    <select name="caregiver_id">
+        {% for caregiver in caregivers %}
+            <option value="{{ caregiver.pk }}">{{ caregiver.caregiver_user.given_name }} {{ caregiver.caregiver_user.surname }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Apply</button>
+</form>
+<p><a href="{% url 'job_list' %}">Back to jobs</a></p>
+

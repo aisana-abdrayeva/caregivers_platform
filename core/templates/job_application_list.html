@@ -1,0 +1,27 @@
+<h1>Job Applications</h1>
+<a href="{% url 'job_application_create' %}">Create Application</a>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Caregiver</th>
+        <th>Job ID</th>
+        <th>Caregiving type</th>
+        <th>Date Applied</th>
+        <th>Actions</th>
+    </tr>
+    {% for app in applications %}
+    <tr>
+        <td>{{ app.id }}</td>
+        <td>{{ app.caregiver.caregiver_user.given_name }} {{ app.caregiver.caregiver_user.surname }}</td>
+        <td>{{ app.job.job_id }}</td>
+        <td>{{ app.job.required_caregiving_type }}</td>
+        <td>{{ app.date_applied }}</td>
+        <td>
+            <form action="{% url 'job_application_delete' app.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

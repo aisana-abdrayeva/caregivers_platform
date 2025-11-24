@@ -1,0 +1,30 @@
+<h1>{% if member %}Edit{% else %}Create{% endif %} Member</h1>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li
+                {% if message.tags %} class="{{ message.tags }}"{% endif %}
+            >
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<form method="post">{% csrf_token %}
+    {% if not member %}
+    <label>User:</label>
+    <select name="user_id" required>
+        <option value="">Select User</option>
+        {% for user in users %}
+        <option value="{{ user.user_id }}">{{ user.given_name }} {{ user.surname }}</option>
+        {% endfor %}
+    </select><br>
+    {% endif %}
+    <label>House Rules:</label>
+    <textarea name="house_rules">{{ member.house_rules|default_if_none:'' }}</textarea><br>
+    <label>Dependent Description:</label>
+    <textarea name="dependent_description">{{ member.dependent_description|default_if_none:'' }}</textarea><br>
+    <button type="submit">Save</button>
+</form>
+<a href="{% url 'member_list' %}">Back to list</a>

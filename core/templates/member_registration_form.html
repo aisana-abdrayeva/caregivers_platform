@@ -1,0 +1,47 @@
+<h1>Family Member Registration</h1>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Account</legend>
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+        <label>Password:</label>
+        <input type="password" name="password" required><br>
+    </fieldset>
+    <fieldset>
+        <legend>Contact</legend>
+        <label>Given Name:</label>
+        <input type="text" name="given_name" required><br>
+        <label>Surname:</label>
+        <input type="text" name="surname" required><br>
+        <label>City:</label>
+        <input type="text" name="city" required><br>
+        <label>Phone number:</label>
+        <input type="text" name="phone_number" required><br>
+    </fieldset>
+    <fieldset>
+        <legend>Address</legend>
+        <label>House number:</label>
+        <input type="text" name="house_number"><br>
+        <label>Street:</label>
+        <input type="text" name="street"><br>
+    </fieldset>
+    <fieldset>
+        <legend>Care Details</legend>
+        <label>Dependent description:</label>
+        <textarea name="dependent_description" required></textarea><br>
+        <label>House rules:</label>
+        <textarea name="house_rules"></textarea><br>
+    </fieldset>
+    <button type="submit">Register</button>
+</form>
+<a href="{% url 'member_list' %}">Back to members</a>
+

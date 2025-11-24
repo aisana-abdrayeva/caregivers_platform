@@ -1,0 +1,41 @@
+<h1>Users</h1>
+<form method="get">
+  <input
+    type="text"
+    name="q"
+    placeholder="Search by name or email"
+    value="{{ query }}"
+  />
+  <button type="submit">Search</button>
+  <a href="{% url 'user_create' %}">Create User</a>
+</form>
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Email</th>
+    <th>Name</th>
+    <th>City</th>
+    <th>Phone</th>
+    <th>Actions</th>
+  </tr>
+  {% for user in users %}
+  <tr>
+    <td>{{ user.user_id }}</td>
+    <td>{{ user.email }}</td>
+    <td>{{ user.given_name }} {{ user.surname }}</td>
+    <td>{{ user.city }}</td>
+    <td>{{ user.phone_number }}</td>
+    <td>
+      <a href="{% url 'user_edit' user.user_id %}">Edit</a> |
+      <form
+        action="{% url 'user_delete' user.user_id %}"
+        method="post"
+        style="display: inline"
+      >
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>

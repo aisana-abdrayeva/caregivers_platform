@@ -1,0 +1,31 @@
+<h1>{% if user %}Edit{% else %}Create{% endif %} User</h1>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li
+                {% if message.tags %} class="{{ message.tags }}"{% endif %}
+            >
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<form method="post">{% csrf_token %}
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ user.email|default_if_none:'' }}" required><br>
+    <label>Given Name:</label>
+    <input type="text" name="given_name" value="{{ user.given_name|default_if_none:'' }}" required><br>
+    <label>Surname:</label>
+    <input type="text" name="surname" value="{{ user.surname|default_if_none:'' }}" required><br>
+    <label>City:</label>
+    <input type="text" name="city" value="{{ user.city|default_if_none:'' }}"><br>
+    <label>Phone:</label>
+    <input type="text" name="phone_number" value="{{ user.phone_number|default_if_none:'' }}"><br>
+    <label>Description:</label>
+    <textarea name="profile_description">{{ user.profile_description|default_if_none:'' }}</textarea><br>
+    <label>Password:</label>
+    <input type="password" name="password" value="{{ user.password|default_if_none:'' }}" required><br>
+    <button type="submit">Save</button>
+</form>
+<a href="{% url 'user_list' %}">Back to list</a>

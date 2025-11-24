@@ -1,0 +1,43 @@
+<h1>{% if job %}Edit{% else %}Create{% endif %} Job</h1>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li
+                {% if message.tags %} class="{{ message.tags }}"{% endif %}
+            >
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<form method="post">{% csrf_token %}
+    <label>Member:</label>
+    <select name="member_id" required>
+        {% for member in members %}
+        <option value="{{ member.pk }}" {% if job and job.member.pk == member.pk %}selected{% endif %}>
+            {{ member.member_user.given_name }} {{ member.member_user.surname }}
+        </option>
+        {% endfor %}
+    </select><br>
+    <label>Required Caregiving Type:</label>
+    <select name="required_caregiving_type" required>
+        {% for value,label in care_types %}
+            <option value="{{ value }}" {% if job.required_caregiving_type == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+    </select><br>
+    <label>Care recipient age:</label>
+    <input type="number" name="care_recipient_age" value="{{ detail.care_recipient_age|default_if_none:'' }}"><br>
+    <label>Preferred time slots:</label>
+    <input type="text" name="preferred_time_slots" value="{{ detail.preferred_time_slots|default_if_none:'' }}"><br>
+    <label>Service frequency:</label>
+    <input type="text" name="service_frequency" value="{{ detail.service_frequency|default_if_none:'' }}" placeholder="e.g., daily, weekends"><br>
+    <label>Other Requirements:</label>
+    <textarea name="other_requirements">{{ job.other_requirements|default_if_none:'' }}</textarea><br>
+    <label>Additional notes:</label>
+    <textarea name="additional_notes">{{ detail.additional_notes|default_if_none:'' }}</textarea><br>
+    <button type="submit">Save</button>
+</form>
+<a href="{% url 'job_list' %}">Back to list</a>

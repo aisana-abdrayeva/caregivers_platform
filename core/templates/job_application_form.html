@@ -1,0 +1,30 @@
+<h1>Create Job Application</h1>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li
+                {% if message.tags %} class="{{ message.tags }}"{% endif %}
+            >
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<form method="post">{% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}">
+    <label>Caregiver:</label>
+    <select name="caregiver_id" required>
+        {% for caregiver in caregivers %}
+        <option value="{{ caregiver.pk }}">{{ caregiver.caregiver_user.given_name }} {{ caregiver.caregiver_user.surname }}</option>
+        {% endfor %}
+    </select><br>
+    <label>Job:</label>
+    <select name="job_id" required>
+        {% for job in jobs %}
+        <option value="{{ job.pk }}">{{ job.job_id }} - {{ job.required_caregiving_type }}</option>
+        {% endfor %}
+    </select><br>
+    <button type="submit">Save</button>
+</form>
+<a href="{% url 'job_application_list' %}">Back to list</a>

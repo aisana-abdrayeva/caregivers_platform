@@ -1,0 +1,55 @@
+<h1>Jobs</h1>
+<p><a href="{% url 'job_create' %}">Post a Job</a></p>
+<form method="get">
+    <label>Caregiving type:</label>
+    <select name="caregiving_type">
+        <option value="">Any</option>
+        {% for value,label in care_types %}
+            <option value="{{ value }}" {% if selected_type == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+    </select>
+    <label>City:</label>
+    <input type="text" name="city" value="{{ city_query }}">
+    <label>Service frequency:</label>
+    <input type="text" name="service_frequency" value="{{ frequency_query }}">
+    <button type="submit">Search</button>
+</form>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Member</th>
+        <th>Required Caregiving Type</th>
+        <th>Age</th>
+        <th>Preferred Time Slots</th>
+        <th>Frequency</th>
+        <th>Date Posted</th>
+        <th>Actions</th>
+    </tr>
+    {% for job in jobs %}
+    <tr>
+        <td>{{ job.job_id }}</td>
+        <td>
+            {% if job.member %}
+                {{ job.member.member_user.given_name }} {{ job.member.member_user.surname }}
+            {% else %}
+                Unassigned
+            {% endif %}
+        </td>
+        <td>{{ job.required_caregiving_type }}</td>
+        <td>{% if job.detail_data %}{{ job.detail_data.care_recipient_age|default_if_none:'-' }}{% else %}-{% endif %}</td>
+        <td>{% if job.detail_data %}{{ job.detail_data.preferred_time_slots|default_if_none:'-' }}{% else %}-{% endif %}</td>
+        <td>{% if job.detail_data %}{{ job.detail_data.service_frequency|default_if_none:'-' }}{% else %}-{% endif %}</td>
+        <td>{{ job.date_posted }}</td>
+        <td>
+            <a href="{% url 'job_detail' job.pk %}">Details</a> |
+            <a href="{% url 'job_edit' job.pk %}">Edit</a> |
+            <form action="{% url 'job_delete' job.pk %}" method="post" style="display:inline">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

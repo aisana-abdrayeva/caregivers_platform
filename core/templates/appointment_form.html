@@ -1,0 +1,47 @@
+<h1>{% if appointment %}Edit{% else %}Create{% endif %} Appointment</h1>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li
+                {% if message.tags %} class="{{ message.tags }}"{% endif %}
+            >
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<form method="post">{% csrf_token %}
+    <label>Caregiver:</label>
+    <select name="caregiver_id" required>
+        <option value="">Select Caregiver</option>
+        {% for caregiver in caregivers %}
+        <option value="{{ caregiver.pk }}" {% if appointment and appointment.caregiver.pk == caregiver.pk %}selected{% endif %}>
+            {{ caregiver.caregiver_user.given_name }} {{ caregiver.caregiver_user.surname }}
+        </option>
+        {% endfor %}
+    </select><br>
+    <label>Member:</label>
+    <select name="member_id" required>
+        <option value="">Select Member</option>
+        {% for member in members %}
+        <option value="{{ member.pk }}" {% if appointment and appointment.member.pk == member.pk %}selected{% endif %}>
+            {{ member.member_user.given_name }} {{ member.member_user.surname }}
+        </option>
+        {% endfor %}
+    </select><br>
+    <label>Date:</label>
+    <input type="date" name="appointment_date" value="{{ appointment.appointment_date|default_if_none:'' }}"><br>
+    <label>Time:</label>
+    <input type="time" name="appointment_time" value="{{ appointment.appointment_time|default_if_none:'' }}"><br>
+    <label>Work Hours:</label>
+    <input type="number" name="work_hours" value="{{ appointment.work_hours|default_if_none:'' }}"><br>
+    <label>Status:</label>
+    <select name="status">
+        {% for status in status_options %}
+            <option value="{{ status }}" {% if current_status == status %}selected{% endif %}>{{ status }}</option>
+        {% endfor %}
+    </select><br>
+    <button type="submit">Save</button>
+</form>
+<a href="{% url 'appointment_list' %}">Back to list</a>

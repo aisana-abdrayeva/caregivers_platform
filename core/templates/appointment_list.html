@@ -1,0 +1,76 @@
+<h1>Appointments</h1>
+<p><a href="{% url 'appointment_create' %}">Create Appointment</a></p>
+<form method="get">
+    <label>Status:</label>
+    <select name="status">
+        <option value="">All</option>
+        {% for status in status_options %}
+            <option value="{{ status }}" {% if status_filter == status %}selected{% endif %}>{{ status }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+</form>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Caregiver</th>
+        <th>Member</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Work Hours</th>
+        <th>Status</th>
+        <th>Contact Info</th>
+        <th>Actions</th>
+    </tr>
+    {% for appt in appointments %}
+    <tr>
+        <td>{{ appt.appointment_id }}</td>
+        <td>
+            {% if appt.caregiver %}
+                {{ appt.caregiver.caregiver_user.given_name }} {{ appt.caregiver.caregiver_user.surname }}
+            {% else %}
+                Unassigned
+            {% endif %}
+        </td>
+        <td>
+            {% if appt.member %}
+                {{ appt.member.member_user.given_name }} {{ appt.member.member_user.surname }}
+            {% else %}
+                Unassigned
+            {% endif %}
+        </td>
+        <td>{{ appt.appointment_date }}</td>
+        <td>{{ appt.appointment_time }}</td>
+        <td>{{ appt.work_hours }}</td>
+        <td>{{ appt.status }}</td>
+        <td>
+            {% if appt.status == "accepted" %}
+                {% if appt.caregiver %}
+                    Caregiver: {{ appt.caregiver.caregiver_user.email }} / {{ appt.caregiver.caregiver_user.phone_number }}<br>
+                {% endif %}
+                {% if appt.member %}
+                    Member: {{ appt.member.member_user.email }} / {{ appt.member.member_user.phone_number }}
+                {% endif %}
+            {% else %}
+                Hidden until confirmed
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'appointment_edit' appt.pk %}">Edit</a>
+            <form action="{% url 'appointment_delete' appt.pk %}" method="post" style="display:inline">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+            <form action="{% url 'appointment_status' appt.pk %}" method="post" style="display:inline">
+                {% csrf_token %}
+                <select name="status">
+                    {% for status in status_options %}
+                        <option value="{{ status }}" {% if appt.status == status %}selected{% endif %}>{{ status }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Update</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
