@@ -119,6 +119,7 @@ class JobDetail(models.Model):
         on_delete=models.CASCADE,
         related_name="detail",
         db_column="job_id",
+        primary_key=True,  # job_id is the primary key in SQL schema
     )
     care_recipient_age = models.PositiveIntegerField(blank=True, null=True)
     preferred_time_slots = models.CharField(max_length=255, blank=True, null=True)
@@ -138,6 +139,7 @@ class ContactRequest(models.Model):
         ("approved", "Approved"),
         ("declined", "Declined"),
     ]
+    contact_request_id = models.AutoField(primary_key=True)
 
     member = models.ForeignKey(
         Member,
@@ -163,4 +165,4 @@ class ContactRequest(models.Model):
         db_table = "contact_request"
 
     def __str__(self):
-        return f"ContactRequest {self.pk}"
+        return f"ContactRequest {self.contact_request_id}"
