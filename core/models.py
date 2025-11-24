@@ -11,7 +11,6 @@ class User(models.Model):
     password = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
         db_table = 'USER'
 
     def __str__(self):
@@ -26,7 +25,6 @@ class Member(models.Model):
     dependent_description = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'member'
 
     def __str__(self):
@@ -42,7 +40,6 @@ class Address(models.Model):
     town = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'address'
 
     def __str__(self):
@@ -59,7 +56,6 @@ class Caregiver(models.Model):
     hourly_rate = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'caregiver'
 
     def __str__(self):
@@ -76,7 +72,6 @@ class Job(models.Model):
     date_posted = models.DateField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'job'
 
     def __str__(self):
@@ -92,7 +87,6 @@ class JobApplication(models.Model):
     date_applied = models.DateField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'job_application'
 
     def __str__(self):
@@ -113,7 +107,6 @@ class Appointment(models.Model):
     status = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'appointment'
 
     def __str__(self):

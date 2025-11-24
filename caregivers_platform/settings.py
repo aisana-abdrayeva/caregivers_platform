@@ -79,13 +79,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'caregivers_platform.wsgi.application'
 
 import dj_database_url
-import os
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
     'default':  dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
+        default='postgresql://user:eDcxOut0d1vzwPYgjnnm4Jvvax6ZHw6p@dpg-d4i474pr0fns73ajt6sg-a.frankfurt-postgres.render.com/caregivers_db_o0j5',
         conn_max_age=600,
         ssl_require=True
     )
