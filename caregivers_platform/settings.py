@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-eu0$(h%67-hbcq$+anw_gwlqwk0me9hgo_p&^#1dh@sn(3agna
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://caregivers-platform-g05s.onrender.com/', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['caregivers-platform-g05s.onrender.com/', 'localhost', '127.0.0.1']
 
 
 # Application definition
